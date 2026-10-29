@@ -1,58 +1,169 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏥 Sistem Informasi Poliklinik
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem Informasi Poliklinik merupakan aplikasi berbasis web yang dibangun menggunakan framework **Laravel** dan database **MySQL**.
 
-## About Laravel
+Aplikasi ini dikembangkan untuk membantu pengelolaan data dan pelayanan poliklinik, mulai dari pengelolaan data dokter, pasien, poli, obat, hingga proses pendaftaran dan pemeriksaan pasien.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Fitur Aplikasi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🔐 Autentikasi
+- Login dan logout.
+- Hak akses berdasarkan role pengguna.
+- Tiga role pengguna: Admin, Dokter, dan Pasien.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 👨‍💼 Admin
+- Dashboard Admin.
+- CRUD Data Poli.
+- CRUD Data Dokter.
+- CRUD Data Pasien.
+- CRUD Data Obat.
 
-## Learning Laravel
+### 👨‍⚕️ Dokter
+- Dashboard Dokter.
+- Pengelolaan jadwal pemeriksaan.
+- Melihat daftar pasien.
+- Melakukan pemeriksaan pasien.
+- Melihat riwayat pemeriksaan pasien.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 🧑 Pasien
+- Dashboard Pasien.
+- Melihat daftar poli.
+- Melakukan pendaftaran poli.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠️ Teknologi yang Digunakan
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Teknologi | Keterangan |
+|---|---|
+| PHP | Bahasa pemrograman backend |
+| Laravel | Framework aplikasi web |
+| MySQL | Database |
+| Blade | Template engine |
+| HTML, CSS, JavaScript | Pengembangan antarmuka |
+| Vite | Pengelolaan aset frontend |
+| Laragon | Lingkungan pengembangan lokal |
+| Git & GitHub | Version control |
 
-## Agentic Development
+## ⚙️ Cara Instalasi
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone Repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/krisnual/poliklinik-app.git
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Masuk ke Folder Proyek
 
-## Contributing
+```bash
+cd poliklinik-app
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Instal Dependensi
 
-## Code of Conduct
+```bash
+composer install
+npm install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Konfigurasi Environment
 
-## Security Vulnerabilities
+Salin file `.env.example` menjadi `.env`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Kemudian sesuaikan konfigurasi database:
 
-## License
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=poliklinik_db
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Buat Database
+
+Buat database baru dengan nama:
+
+```text
+poliklinik_db
+```
+
+### 7. Jalankan Migration
+
+```bash
+php artisan migrate
+```
+
+Jika proyek menyediakan seeder untuk data awal dan akun pengguna, jalankan seeder sesuai konfigurasi proyek.
+
+### 8. Jalankan Aplikasi
+
+```bash
+php artisan serve
+```
+
+Pada terminal lain, jalankan:
+
+```bash
+npm run dev
+```
+
+Aplikasi dapat diakses melalui alamat lokal yang ditampilkan oleh Laravel.
+
+## 📁 Struktur Direktori
+
+```text
+poliklinik-app/
+├── app/
+│   ├── Http/
+│   │   └── Controllers/
+│   └── Models/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+├── resources/
+│   └── views/
+├── routes/
+│   └── web.php
+├── storage/
+├── tests/
+├── .env.example
+├── artisan
+├── composer.json
+├── package.json
+└── README.md
+```
+
+## 📸 Screenshot Aplikasi
+
+Dokumentasi screenshot aplikasi dapat ditambahkan pada bagian ini.
+
+Contoh halaman yang dapat ditampilkan:
+- Halaman Login.
+- Dashboard Admin.
+- Halaman Data Poli.
+- Halaman Data Dokter.
+- Halaman Data Pasien.
+- Halaman Data Obat.
+- Halaman Pemeriksaan Pasien.
+- Halaman Riwayat Pasien.
+
+## 👨‍💻 Pengembang
+
+**Nama:** Krisna Nur Alamsyah  
+**NIM:** A11.2023.15229  
+**Program:** Bengkel Koding  
+**Proyek:** Sistem Informasi Poliklinik  
+**Framework:** Laravel
+
+## 📄 Tentang Proyek
+
+Proyek ini dibuat sebagai bagian dari kegiatan pembelajaran Bengkel Koding untuk mengimplementasikan konsep pengembangan aplikasi web menggunakan Laravel, pengelolaan database, autentikasi pengguna, dan operasi CRUD.
