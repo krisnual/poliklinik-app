@@ -9,65 +9,89 @@ use Illuminate\Support\Facades\Auth;
 
 class JadwalPeriksaController extends Controller
 {
-    public function index(){
+    // Menampilkan jadwal periksa milik dokter yang sedang login
+    public function index()
+    {
         $dokter = Auth::user();
-        $jadwalPeriksas = JadwalPeriksa::where('id_dokter', $dokter->id)->orderBy('hari')->get();
+
+        $jadwalPeriksas = JadwalPeriksa::where('id_dokter', $dokter->id)
+            ->orderBy('hari')
+            ->get();
+
         return view('dokter.jadwal-periksa.index', compact('jadwalPeriksas'));
     }
 
-    public function create(){
+    // Menampilkan form tambah jadwal periksa
+    public function create()
+    {
         return view('dokter.jadwal-periksa.create');
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required'
+    // Menyimpan jadwal periksa baru
+    public function store(Request $request)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
         ]);
 
-        JadwalPeriksa::create([
-            'id_dokter' => Auth::id(),
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai
-        ]);
+        // ID dokter diambil dari akun yang sedang login
+        $validated['id_dokter'] = Auth::id();
 
-        return redirect()->route('jadwal-periksa.index')
-            ->with('message', 'Data Berhasil di Simpan')
+        JadwalPeriksa::create($validated);
+
+        return redirect()
+            ->route('jadwal-periksa.index')
+            ->with('message', 'Jadwal periksa berhasil ditambahkan.')
             ->with('type', 'success');
     }
 
-    public function edit($id){
-        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
+    // Menampilkan form edit jadwal milik dokter yang login
+    public function edit(string $id)
+    {
+        $jadwalPeriksa = JadwalPeriksa::where('id_dokter', Auth::id())
+            ->findOrFail($id);
+
         return view('dokter.jadwal-periksa.edit', compact('jadwalPeriksa'));
     }
 
-    public function update(Request $request, string $id){
-        $request->validate([
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required'
+    // Memperbarui jadwal periksa
+    public function update(Request $request, string $id)
+    {
+        // Pastikan jadwal milik dokter yang login
+        $jadwalPeriksa = JadwalPeriksa::where('id_dokter', Auth::id())
+            ->findOrFail($id);
+
+        // Validasi input
+        $validated = $request->validate([
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
         ]);
 
-        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
-        $jadwalPeriksa->update([
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai
-        ]);
+        // Perbarui jadwal
+        $jadwalPeriksa->update($validated);
 
-        return redirect()->route('jadwal-periksa.index')
-            ->with('message', 'Berhasil Melakukan Update Data')
+        return redirect()
+            ->route('jadwal-periksa.index')
+            ->with('message', 'Jadwal periksa berhasil diperbarui.')
             ->with('type', 'success');
     }
 
-    public function destroy(string $id){
-        $jadwalPeriksa = JadwalPeriksa::findOrFail($id);
+    // Menghapus jadwal periksa
+    public function destroy(string $id)
+    {
+        // Pastikan jadwal milik dokter yang login
+        $jadwalPeriksa = JadwalPeriksa::where('id_dokter', Auth::id())
+            ->findOrFail($id);
+
         $jadwalPeriksa->delete();
 
-        return redirect()->route('jadwal-periksa.index')
-            ->with('message', 'Berhasil Melakukan Hapus Data')
+        return redirect()
+            ->route('jadwal-periksa.index')
+            ->with('message', 'Jadwal periksa berhasil dihapus.')
             ->with('type', 'success');
     }
 }
