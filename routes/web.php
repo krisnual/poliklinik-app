@@ -29,15 +29,18 @@ Route::get('/', function () {
 
 // ================= AUTHENTICATION =================
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::get('/login', [AuthController::class, 'showLogin'])
+    ->name('login');
 
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/register', [AuthController::class, 'showRegister']);
 
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])
+    ->name('register');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');
 
 
 // ================= ADMIN =================
@@ -46,6 +49,7 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->group(function () {
 
+        // Dashboard Admin
         Route::get('/dashboard', function () {
             return view('admin.dashboard');
         })->name('admin.dashboard');
@@ -60,7 +64,9 @@ Route::middleware(['auth', 'role:admin'])
         Route::resource('pasien', PasienController::class);
 
         // CRUD Obat
-        Route::resource('obat', ObatController::class);
+        // Hanya index, create, store, edit, update, destroy
+        Route::resource('obat', ObatController::class)
+            ->except(['show']);
     });
 
 
@@ -76,22 +82,31 @@ Route::middleware(['auth', 'role:dokter'])
         })->name('dokter.dashboard');
 
         // CRUD Jadwal Periksa
-        Route::resource('jadwal-periksa', JadwalPeriksaController::class);
+        // Hanya index, create, store, edit, update, destroy
+        Route::resource('jadwal-periksa', JadwalPeriksaController::class)
+            ->except(['show']);
 
-        // Pemeriksaan Pasien
+        // ================= PERIKSA PASIEN =================
+
+        // Menampilkan daftar pasien yang akan diperiksa
         Route::get('/periksa-pasien', [PeriksaPasienController::class, 'index'])
             ->name('periksa-pasien.index');
 
+        // Menyimpan hasil pemeriksaan pasien
         Route::post('/periksa-pasien', [PeriksaPasienController::class, 'store'])
             ->name('periksa-pasien.store');
 
+        // Menampilkan form pemeriksaan pasien
         Route::get('/periksa-pasien/{id}', [PeriksaPasienController::class, 'create'])
             ->name('periksa-pasien.create');
 
-        // Riwayat Pasien
+        // ================= RIWAYAT PASIEN =================
+
+        // Menampilkan daftar riwayat pemeriksaan
         Route::get('/riwayat-pasien', [RiwayatPasienController::class, 'index'])
             ->name('riwayat-pasien.index');
 
+        // Menampilkan detail riwayat pemeriksaan
         Route::get('/riwayat-pasien/{id}', [RiwayatPasienController::class, 'show'])
             ->name('riwayat-pasien.show');
     });
@@ -108,10 +123,11 @@ Route::middleware(['auth', 'role:pasien'])
             return view('pasien.dashboard');
         })->name('pasien.dashboard');
 
-        // Pendaftaran Poli
+        // Menampilkan halaman pendaftaran poli
         Route::get('/daftar', [PoliController::class, 'get'])
             ->name('pasien.daftar');
 
+        // Menyimpan pendaftaran poli
         Route::post('/daftar', [PoliController::class, 'submit'])
             ->name('pasien.daftar.submit');
     });
